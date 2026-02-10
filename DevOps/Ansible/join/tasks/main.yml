@@ -1,0 +1,54 @@
+---
+## The first way
+## ------ We want to take the output (Join command) from the master to join the worker for the cluster ------
+
+## ------ set_fact module 
+## ------ create or overwrite a variable during playbook execution
+## ------ set_fact creates a variable join_cmd or any name variable you want
+
+# - name: Load local file content into a variable
+#   ansible.builtin.set_fact:
+#     join_cmd: "{{ lookup('file', './output.txt') }}"
+
+# - name: Check if worker already joined
+#   ansible.builtin.stat:
+#     path: /etc/kubernetes/kubelet.conf
+#   register: kubelet_conf
+
+# - name: Run join command on workers
+#   ansible.builtin.command: "{{ join_cmd }}"
+#   register: join_command
+#   changed_when: join_command.rc == 0
+#   when: not kubelet_conf.stat.exists
+
+## The Second way
+
+- name: Check if worker already joined
+  ansible.builtin.stat:
+    path: /etc/kubernetes/kubelet.conf
+  register: kubelet_conf
+
+- name: Join cluster
+  ansible.builtin.command: "{{ hostvars['master'].join_cmd }}"
+  register: join_cluster
+  changed_when: join_cluster.rc == 0
+
+- name: Make dir for kubeadm config
+  ansible.builtin.file:
+    state: directory
+    path: "/home/ubuntu/.kube"
+    mode: "0755"
+
+- name: Make file for kubeadm config
+  ansible.builtin.file:
+    state: touch
+    path: "/home/ubuntu/.kube/config"
+    mode: '0644'
+
+- name: Copy kubeconfig content to worker
+  ansible.builtin.copy:
+    dest: /home/ubuntu/.kube/config
+    content: "{{ hostvars['master'].kubeconfig_raw }}"
+    owner: ubuntu
+    group: ubuntu
+    mode: '0644'

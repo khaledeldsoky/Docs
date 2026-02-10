@@ -1,0 +1,16 @@
+- name: Bastion
+  hosts: bastion
+  roles:
+    # - jenkins
+    # - docker
+    - nginx_proxy
+
+
+- name: Private
+  hosts: private
+  roles:
+    # - jenkins
+    # - docker
+    # - nginx_proxy
+    # - http
+    - run_scripts

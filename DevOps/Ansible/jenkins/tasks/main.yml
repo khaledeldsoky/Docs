@@ -1,0 +1,42 @@
+- name: Update
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: Install jenkins requirements
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ jenkins_var }}"
+
+
+- name: Download and import the Jenkins repository key
+  ansible.builtin.get_url:
+    url: https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+    dest: /usr/share/keyrings/jenkins-keyring.asc
+    mode: 777
+
+- name: Setting up the Jenkins repository as a package source also specifies that the repository should be signed by the key located
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]  https://pkg.jenkins.io/debian-stable binary/"
+    filename: jenkins.list
+    state: present
+  notify: Update
+
+- name: Install java
+  ansible.builtin.apt:
+    name:
+      - fontconfig
+      - openjdk-17-jre
+  notify: Update
+
+
+- name: Install jenkins
+  ansible.builtin.apt:
+    name: jenkins
+    state: present
+
+- name: Enable and start jenkins
+  ansible.builtin.service:
+    name: jenkins
+    enabled: true
+    state: started

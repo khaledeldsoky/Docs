@@ -1,0 +1,4 @@
+- name: Upgrade and update
+  ansible.builtin.apt:
+    upgrade: true
+    update_cache: false
