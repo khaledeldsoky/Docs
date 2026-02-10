@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  oracle-db:
+    image: container-registry.oracle.com/database/free
+    container_name: oracle-db
+    restart: always
+    ports:
+      - 1521:1521  # SQL*Net
+      - 5500:5500  # EM Express
+    environment:
+      ORACLE_PWD: "YourPassword123"
+    volumes:
+      - oracle_data:/opt/oracle/oradata
+    networks:
+      - oranet
+
+volumes:
+  oracle_data:
+
+networks:
+  oranet:

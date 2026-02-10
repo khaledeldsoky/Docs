@@ -1,0 +1,2 @@
+terraform destroy -target=<RESOURCE_TYPE>.<RESOURCE_NAME>
+terraform destroy -target=module.Compute.instances.bastion-instance

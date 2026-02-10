@@ -1,0 +1,527 @@
+// ------------------------- EMployee Helper -------------------------
+// ------------------------- EMployee Helper -------------------------
+// using System;
+// using System.Data;
+// using MySql.Data.MySqlClient;
+
+// /* =========================
+//    CONFIGURATION
+//    ========================= */
+
+
+// /* =========================
+//    MAIN MENU LOOP
+//    ========================= */
+
+
+
+// EmployeeManager employeeManager = new EmployeeManager();
+// employeeManager.ViewMenu();
+
+// class Employee
+// {
+//   public int ID { get; private set; }
+//   public string Name { get; private set; }
+//   public double Salary { get; private set; }
+
+//   public Employee(int id, string name, double salary)
+//   {
+//     ID = id;
+//     Name = name;
+//     Salary = salary;
+//   }
+
+//   public double CalcBonus()
+//   {
+//     return Salary * 0.10;
+//   }
+
+//   public double CalcDeduction()
+//   {
+//     return Salary * 0.05;
+//   }
+
+//   public double CalcTax()
+//   {
+//     return Salary * 0.15;
+//   }
+
+//   public double CalcFinalSalary()
+//   {
+//     return Salary + CalcBonus() - CalcTax() - CalcDeduction();
+//   }
+
+// }
+
+
+// class EmployeeManager
+// {
+//   string connectionString =
+//   "Server=localhost;" +
+//   "Port=3306;" +
+//   "Database=library_db;" +
+//   "User=root;" +
+//   "Password=root123;";
+
+
+
+
+//   public string ValidName(string label)
+//   {
+//     string Name = "";
+//     bool Valid = false;
+//     while (!Valid)
+//     {
+//       Console.WriteLine(label + ":");
+//       Name = Console.ReadLine();
+//       if (!string.IsNullOrWhiteSpace(Name))
+//       {
+//         Valid = true;
+//       }
+//       else
+//       {
+//         Console.WriteLine("Please Add A Valid Name.");
+//       }
+//     }
+//     return Name;
+//   }
+
+//   public double ValidDouble(string label)
+//   {
+//     double number = 0;
+//     bool Valid = false;
+
+//     while (!Valid)
+//     {
+//       Console.WriteLine(label + ":");
+//       string input = Console.ReadLine();
+//       if (double.TryParse(input, out number))
+//       {
+//         Valid = true;
+//       }
+//       else
+//       {
+//         Console.WriteLine("Please Enter A Valid Number.");
+//       }
+//     }
+//     return number;
+//   }
+
+//   public int ValidInt(string label)
+//   {
+//     int number = 0;
+//     bool Valid = false;
+
+//     while (!Valid)
+//     {
+//       Console.WriteLine(label + "");
+//       string input = Console.ReadLine();
+//       if (int.TryParse(input, out number))
+//       {
+//         Valid = true;
+//       }
+//       else
+//       {
+//         Console.WriteLine("Please Enter A Valid Number.");
+//       }
+//     }
+//     return number;
+//   }
+
+//   public bool ValidIdEmployee(int id)
+//   {
+//      MySqlConnection connectusingion = new MySqlConnection(connectionString);
+//     connection.Open();
+
+//     string sql = "SELECT COUNT(*) from employees WHERE id = @id";
+//     using MySqlCommand command = new MySqlCommand(sql, connection);
+//     command.Parameters.AddWithValue("@id", id);
+
+//     int ID = Convert.ToInt32(command.ExecuteScalar());
+
+//     return ID > 0;
+//   }
+
+//   public void ViewMenu()
+//   {
+//     bool Valid = false;
+//     while (!Valid)
+//     {
+//       Console.WriteLine("\n===== Employee System =====");
+//       Console.WriteLine("1. Add Employee");
+//       Console.WriteLine("2. View Employees");
+//       Console.WriteLine("3. Find Employee By ID");
+//       Console.WriteLine("4. Update Employee");
+//       Console.WriteLine("5. Delete Employee");
+//       Console.WriteLine("6. Sort by Salary");
+//       Console.WriteLine("7. Print Salary Report");
+//       Console.WriteLine("0. Exit");
+//       int Choice = ValidInt("Please Enter your Choice");
+//       if (Choice > 7 || Choice < 0)
+//         Console.WriteLine("Please Add Valid Choice");
+//       switch (Choice)
+//       {
+//         case 1:
+//           AddEmployee();
+//           break;
+//         case 2:
+//           ViewEmployees();
+//           break;
+//         case 3:
+//           FindEmployeeByID();
+//           break;
+//         case 4:
+//           UpdateEmployee();
+//           break;
+//         case 5:
+//           DeleteEmployee();
+//           break;
+//         case 6:
+//           SortedBySalary();
+//           break;
+//         case 7:
+//           PrintSalaryReport();
+//           break;
+//         case 0:
+//           return;
+//       }
+//     }
+
+//   }
+
+//   public void AddEmployee()
+//   {
+
+//     using MySqlConnection connection = new MySqlConnection(connectionString);
+//     connection.Open();
+
+//     string sql =
+//     "INSERT INTO employees(name,salary,bonus,tax,deduction)" +
+//     "VALUES (@name,@salary,@bonus,@tax,@deduction)";
+
+//     string name = ValidName("Enter The Name:");
+//     double salary = ValidDouble("Enter The Salary");
+//     Console.WriteLine("✔ salary Is Add Succes.");
+
+//     Employee emp = new Employee(0, name, salary);
+
+//     double bonus = emp.CalcBonus();
+//     double tax = emp.CalcTax();
+//     double deduction = emp.CalcDeduction();
+//     using MySqlCommand command = new MySqlCommand(sql, connection);
+
+//     command.Parameters.AddWithValue("@name", name);
+//     command.Parameters.AddWithValue("@salary", salary);
+//     command.Parameters.AddWithValue("@bonus", bonus);
+//     command.Parameters.AddWithValue("@tax", tax);
+//     command.Parameters.AddWithValue("@deduction", deduction);
+
+//     command.ExecuteNonQuery();
+
+//     Console.WriteLine("✔ Employee saved to database");
+//   }
+
+//   public void ViewEmployees()
+//   {
+
+//     using MySqlConnection connection = new MySqlConnection(connectionString);
+//     connection.Open();
+
+//     string sql = "SELECT * FROM employees";
+
+//     using MySqlCommand command = new MySqlCommand(sql, connection);
+//     using MySqlDataReader dataReader = command.ExecuteReader();
+
+//     while (dataReader.Read())
+//     {
+//       Console.WriteLine($"ID : {dataReader["id"]} | Name :{dataReader["name"]} | Base : {dataReader["salary"]}");
+//     }
+//   }
+
+//   public void FindEmployeeByID()
+//   {
+//     int id = ValidInt("Enter The ID");
+//     if (!ValidIdEmployee(id))
+//       Console.WriteLine("❌ This ID does not exist.");
+
+//     using MySqlConnection connection = new MySqlConnection(connectionString);
+//     connection.Open();
+
+//     string sql = "SELECT * FROM employees where id = @id";
+
+//     using MySqlCommand command = new MySqlCommand(sql, connection);
+//     command.Parameters.AddWithValue("@id", id);
+//     using MySqlDataReader dataReader = command.ExecuteReader();
+
+//     if (dataReader.Read())
+//     {
+//       Console.WriteLine($"ID : {dataReader["id"]} | Name :{dataReader["name"]} | Base : {dataReader["salary"]}");
+//     }
+//   }
+
+//   public int UpdateEmployee()
+//   {
+//     int id = ValidInt("Enter The ID");
+//     using MySqlConnection connection = new MySqlConnection(connectionString);
+//     connection.Open();
+//     double salary = ValidDouble("Enter The Salary");
+
+
+//     string sql = "UPDATE employees SET salary=@salary where id = @id";
+//     using MySqlCommand command = new MySqlCommand(sql, connection);
+//     command.Parameters.AddWithValue("@salary", salary);
+//     command.Parameters.AddWithValue("@id", id);
+
+//     int count = command.ExecuteNonQuery();
+
+//     if (count > 0)
+//     {
+//       Console.WriteLine("✔ Employee updated");
+//     }
+//     else
+//     {
+//       Console.WriteLine("❌ ID not found");
+//     }
+//     return -1;
+//   }
+
+//   public void SortedBySalary()
+//   {
+//     string sql = "SELECT name,(salary+bonus-tax-deduction) As FinalSalary from employees ORDER BY FinalSalary";
+//     using MySqlConnection connection = new MySqlConnection(connectionString);
+//     connection.Open();
+//     using MySqlCommand command = new MySqlCommand(sql, connection);
+//     using MySqlDataReader dataReader = command.ExecuteReader();
+
+//     while (dataReader.Read())
+//       Console.WriteLine($"Name : {dataReader["name"]} | Final Salary : {dataReader["FinalSalary"]}");
+//   }
+
+//   public void DeleteEmployee()
+//   {
+//     int id = ValidInt("Enter The ID");
+//     using MySqlConnection connection = new MySqlConnection(connectionString);
+//     connection.Open();
+//     string sql = "DELETE FROM employees WHERE id=@id";
+//     using MySqlCommand command = new MySqlCommand(sql, connection);
+//     command.Parameters.AddWithValue("@id", id);
+//     command.ExecuteNonQuery();
+//   }
+
+//   public void PrintSalaryReport()
+//   {
+//     string sql =
+//     "SELECT COUNT(*) total, " +
+//     "AVG(salary+bonus-tax-deduction) avgSalary, " +
+//     "MAX(salary+bonus-tax-deduction) maxSalary, " +
+//     "MIN(salary+bonus-tax-deduction) minSalary " +
+//     "FROM employees";
+
+//     using MySqlConnection connection = new MySqlConnection(connectionString);
+//     connection.Open();
+//     using MySqlCommand command = new MySqlCommand(sql, connection);
+
+//     using MySqlDataReader dataReader = command.ExecuteReader();
+
+//     while (dataReader.Read())
+//     {
+//       Console.WriteLine($"Total Employees: {dataReader["total"]}");
+//       Console.WriteLine($"Total avg Salary: {dataReader["avgSalary"]}");
+//       Console.WriteLine($"Total max Salary: {dataReader["maxSalary"]}");
+//       Console.WriteLine($"Total min Salary: {dataReader["minSalary"]}");
+//     }
+//   }
+
+// }
+
+
+
+
+
+
+
+
+// Models
+
+/* using Employee.Models;
+// using Employee.Services;
+// using Microsoft.AspNetCore.Mvc;
+// using MySqlX.XDevAPI.Common;
+// namespace Employee.Controllers
+// {
+//   [ApiController]
+//   [Route("api/employees")]
+//   public class EmployeeController : ControllerBase
+//   {
+//     private readonly EmployeeServices services = new EmployeeServices();
+//     [HttpPost]
+//     public IActionResult AddEmployee(EmployeeModels employee)
+//     {
+//       if (string.IsNullOrWhiteSpace(employee.Name))
+//         return BadRequest("Name Is Required");
+//       if (employee.Salary < 0)
+//         return BadRequest("Not Valid Salary");
+//       if (!Enum.IsDefined(typeof(EmployeeType), employee.Type))
+//         return BadRequest("Not Valid Type");
+//       services.Add(employee);
+//       return Ok("Employee Add");
+//     }
+//     [HttpGet]
+//     public IActionResult GetEmployee()
+//     {
+//       List<EmployeeModels> employee = services.GetAll();
+//       var result = employee.Select(e => (new { e.Name, e.Salary, FinalSalary = e.CalculateFinalSalary() }));
+
+//       return Ok(result);
+//     }
+
+//     [HttpGet("type/{type}")]
+
+//     public IActionResult GetEmployeeType(string  type)
+//     {
+
+//       if (!Enum.TryParse<EmployeeType>(type, true, out var employeeType))
+//         return BadRequest("Not Valid Type");
+//       var result = services.GetEmployeeByType(employeeType);
+
+//       return Ok(result);
+
+//     }
+//   }
+}*/ 
+
+// Controllers
+
+/*
+using Employee.Models;
+using Employee.Services;
+using Microsoft.AspNetCore.Mvc;
+using MySqlX.XDevAPI.Common;
+
+namespace Employee.Controllers
+{
+  [ApiController]
+  [Route("api/employees")]
+  public class EmployeeController : ControllerBase
+  {
+    private readonly EmployeeServices services = new EmployeeServices();
+
+    [HttpPost]
+    public IActionResult AddEmployee(EmployeeModels employee)
+    {
+      if (string.IsNullOrWhiteSpace(employee.Name))
+        return BadRequest("Name Is Required");
+
+      if (employee.Salary < 0)
+        return BadRequest("Not Valid Salary");
+
+      if (!Enum.IsDefined(typeof(EmployeeType), employee.Type))
+        return BadRequest("Not Valid Type");
+
+      services.Add(employee);
+
+
+      return Ok("Employee Add");
+    }
+
+    [HttpGet]
+    public IActionResult GetEmployee()
+    {
+      List<EmployeeModels> employee = services.GetAll();
+
+      var result = employee.Select(e => (new { e.Name, e.Salary, FinalSalary = e.CalculateFinalSalary() }));
+
+      return Ok(result);
+    }
+
+    [HttpGet("type/{type}")]
+
+    public IActionResult GetEmployeeType(string  type)
+    {
+
+      if (!Enum.TryParse<EmployeeType>(type, true, out var employeeType))
+        return BadRequest("Not Valid Type");
+      var result = services.GetEmployeeByType(employeeType);
+
+      return Ok(result);
+
+    }
+  }
+}*/
+
+// Services
+
+/*
+using Microsoft.AspNetCore.SignalR;
+using MySql.Data.MySqlClient;
+using Employee.Models;
+namespace Employee.Services
+{
+  class EmployeeServices
+  {
+    private readonly string stringConnection = "Server=localhost;Port=3306;Database=company_db;User=root;Password=root123";
+    List<EmployeeModels> employees = new List<EmployeeModels>();
+    public List<EmployeeModels> GetAll()
+    {
+      employees.Clear();
+      using MySqlConnection connection = new MySqlConnection(stringConnection);
+      connection.Open();
+
+      string sql = "Select * from employees";
+
+      using MySqlCommand command = new MySqlCommand(sql, connection);
+      using MySqlDataReader dataReader = command.ExecuteReader();
+
+
+      while (dataReader.Read())
+      {
+        var employee = new EmployeeModels
+        {
+          Id = dataReader.GetInt32("id"),
+          Name = dataReader.GetString("name"),
+          Bonus = dataReader.GetDouble("bonus"),
+          Tax = dataReader.GetDouble("tax"),
+          Deduction = dataReader.GetDouble("deduction"),
+          Salary = dataReader.GetDouble("salary"),
+
+          Type = (EmployeeType)dataReader.GetInt32("Type"),
+        };
+
+
+        employees.Add(employee);
+
+      }
+
+      return employees;
+    }
+
+    public void Add(EmployeeModels employee)
+    {
+
+      using MySqlConnection connection = new MySqlConnection(stringConnection);
+      connection.Open();
+
+      string sql = "INSERT INTO employees (name,bonus,tax,deduction,salary,type)" +
+                    "VALUES(@n,@b,@t,@d,@s,@type)";
+
+      using MySqlCommand command = new MySqlCommand(sql, connection);
+
+      command.Parameters.AddWithValue("@n", employee.Name);
+      command.Parameters.AddWithValue("@b", employee.Bonus);
+      command.Parameters.AddWithValue("@t", employee.Tax);
+      command.Parameters.AddWithValue("@d", employee.Deduction);
+      command.Parameters.AddWithValue("@s", employee.Salary);
+      command.Parameters.AddWithValue("@type", employee.Type);
+
+      command.ExecuteNonQuery();
+    }
+
+    public List<EmployeeModels>  GetEmployeeByType(EmployeeType type)
+    {
+      return GetAll()
+      .Where(e => e.Type == type)
+      .ToList();
+    }
+  }
+}
+*/

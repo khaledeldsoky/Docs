@@ -1,0 +1,15 @@
+# Generate an SSH key pair 
+
+ssh-keygen -t rsa -b 4096
+
+# Copy the Public Key to the Worker Node
+
+ssh-copy-id ubuntu@192.168.2.4
+
+
+ssh -i cluster_rsa.prv ubuntu@52.118.249.93
+
+
+wget https://releases.ubuntu.com/jammy/ubuntu-22.04.5-live-server-amd64.iso
+virt-install --graphics none --console pty,target_type=serial -wait -1 --connect qemu:///system  --name bastion --vcpus 4 --memory 8192 --disk path=/home/ubuntu/vdd/bastion.qcow2,size=60  --cdrom ubuntu-22.04.5-live-server-amd64.iso   --os-variant ubuntu24.04   --network network=default 
+

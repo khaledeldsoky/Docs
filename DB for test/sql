@@ -1,0 +1,30 @@
+
+
+db-sample-schemas/human_resources/hr_install.
+@/opt/oracle/db/human_resources/hr_install.sql
+
+Oracle123
+system
+
+  docker-compose -f Orcale+dbeaver.yml up -d
+  docker-compose -f Orcale+dbeaver.yml down 
+
+  docker cp /home/khaled/khaled/db-sample-schemas/ oracle-xe:/opt/oracle/db
+  docker exec -it oracle-xe bash
+  sqlplus system/Oracle123@localhost:1521/XEPDB1
+
+# docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=123 -p 3306:3306 -d mysql
+
+# docker cp /home/khaled/khaled/SQL/sakila-db/sakila-db/sakila-schema.sql mysql-container:/sakila-schema.sql
+# docker cp /home/khaled/khaled/SQL/sakila-db/sakila-db/sakila-data.sql mysql-container:/sakila-data.sql
+
+# docker exec -it mysql-container mysql -uroot -p123
+# SOURCE /sakila-schema.sql;
+# SOURCE /sakila-data.sql;
+
+# SHOW DATABASES;
+
+# Host: localhost
+# Port: 3306
+# Username: root
+# Password: 123 (or whatever you set)

@@ -1,0 +1,11 @@
+grep -l "500" *
+
+find . -type f -name "*.doc" -delete 
+find . -type f -name '*.txt' -exec sed -i 's/challenges are difficult//g' {} + 
+find . -type f -printf "%f\n"
+
+cut -d: -f2-
+
+tr 'a' 'A'
+#Replace a with A
+awk '{sum += $1} END {print sum}' filename

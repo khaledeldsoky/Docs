@@ -1,0 +1,25 @@
+CREATE TABLE signup (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL ,
+    phone VARCHAR(100) NOT NULL,
+    token VARCHAR(20)  NOT NULL
+);
+
+SELECT * from signup
+
+SELECT COUNT(*) from signup WHERE email = "khaledatia@gmail.com" and password = "123456Aa!"
+
+SELECT email , username , PASSWORD FROM users
+
+insert into  signup (username , email , password  ,phone  ) Values("Khaled","kh","1","1")
+
+insert into phone_otps (phone) Values ("010910")
+
+SELECT expires_at from phone_otps WHERE otp_code = "382576" and  expires_at > NOW()
+
+
+UPDATE users
+SET password = "khaled"
+WHERE email = "$2a$11$1GryqQ3H74qe6UdNYVLpP.jbMwVZkD/bLV5vNNi0.YEWP6a0LbjpO"; 

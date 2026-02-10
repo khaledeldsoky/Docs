@@ -1,0 +1,20 @@
+# ------------------ on the master node:
+
+kubectl drain worker-instance-1 --delete-emptydir-data --force --ignore-daemonsets
+kubectl drain worker-instance-2 --delete-emptydir-data --force --ignore-daemonsets
+
+kubectl delete node worker-instance-1
+kubectl delete node worker-instance-2
+
+# ------------------ on the node
+
+sudo kubeadm reset -f
+sudo systemctl restart kubelet
+sudo rm -rf /etc/cni/net.d
+
+
+# ------------------ on the master node:
+
+kubeadm token create --print-join-command
+
+

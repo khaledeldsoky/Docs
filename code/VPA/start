@@ -1,0 +1,87 @@
+Press Alt + F11 to open the VBA Editor.
+
+Press F5 or go to Run > Run Sub/UserForm to execute it
+
+
+# Copy all the sheet to another
+
+Private Sub Worksheet_Change(ByVal Target As Range)
+    Dim wsSource As Worksheet, wsDest As Worksheet
+    Set wsSource = ThisWorkbook.Sheets("Sheet1")
+    Set wsDest = ThisWorkbook.Sheets("Sheet2")
+    
+    Application.EnableEvents = False  ' Prevent infinite loops
+    wsDest.Cells.Clear  ' Clear old data
+    wsSource.Cells.Copy wsDest.Range("A1")  ' Copy data from Sheet1 to Sheet2
+    Application.EnableEvents = True  ' Re-enable events
+End Sub
+
+-----------------------------------------------------------------------------
+# Copy sheet by filter
+
+Private Sub Worksheet_Change(ByVal Target As Range)
+    Dim wsSource As Worksheet, wsDest As Worksheet
+    Dim lastRow As Long, destRow As Long
+    Dim rng As Range, cell As Range
+    
+    Set wsSource = ThisWorkbook.Sheets("Sheet1") ' Source sheet
+    Set wsDest = ThisWorkbook.Sheets("Sheet2") ' Destination sheet
+
+    Application.EnableEvents = False  ' Prevent infinite loops
+    wsDest.Cells.Clear  ' Clear old data
+
+    ' Find last row in Sheet1
+    lastRow = wsSource.Cells(wsSource.Rows.Count, "A").End(xlUp).Row
+
+    ' Copy header row
+    wsSource.Rows(1).Copy Destination:=wsDest.Rows(1)
+    
+    ' Loop through rows to filter and copy only Type = 5000
+    destRow = 2
+    Set rng = wsSource.Range("A2:A" & lastRow) ' Adjusted to column A for correct row range
+    
+    For Each cell In rng
+        If cell.Offset(0, 2).Value = 5000 Then ' Column C = "Type" (Index 2)
+            wsSource.Rows(cell.Row).Copy Destination:=wsDest.Rows(destRow)
+            destRow = destRow + 1
+        End If
+    Next cell
+
+    Application.EnableEvents = True ' Re-enable events
+End Sub
+-----------------------------------------------------------------------------
+# Copy sheet by filter and change Column by index
+
+Private Sub Worksheet_Change(ByVal Target As Range)
+    Dim wsSource As Worksheet, wsDest As Worksheet
+    Dim lastRow As Long, destRow As Long
+    Dim rng As Range, cell As Range
+
+    Set wsSource = ThisWorkbook.Sheets("Sheet1") ' Source sheet
+    Set wsDest = ThisWorkbook.Sheets("Sheet2") ' Destination sheet
+
+    Application.EnableEvents = False  ' Prevent infinite loops
+    wsDest.Cells.Clear  ' Clear old data
+
+    ' Find last row in Sheet1
+    lastRow = wsSource.Cells(wsSource.Rows.Count, "A").End(xlUp).Row
+
+    ' Copy header row
+    wsSource.Rows(1).Copy Destination:=wsDest.Rows(1)
+    wsDest.Cells(1, 1).Value = "Index" ' Rename first column to "Index"
+
+    ' Loop through rows to filter and copy only Type = 5000
+    destRow = 2
+    Set rng = wsSource.Range("A2:A" & lastRow) ' Adjusted to column A for correct row range
+
+    For Each cell In rng
+        If cell.Offset(0, 2).Value = 5000 Then ' Column C = "Type" (Index 2)
+            wsSource.Rows(cell.Row).Copy Destination:=wsDest.Rows(destRow)
+            wsDest.Cells(destRow, 1).Value = destRow - 1 ' Assign index number (1,2,3...)
+            destRow = destRow + 1
+        End If
+    Next cell
+
+    Application.EnableEvents = True ' Re-enable events
+End Sub
+

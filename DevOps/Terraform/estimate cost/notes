@@ -1,0 +1,14 @@
+# install infracost
+curl -fsSL https://raw.githubusercontent.com/infracost/infracost/master/scripts/install.sh | sh
+
+#login 
+infracost auth login
+
+#make the plan for binary 
+terraform plan -out=tfplan.binary -var-file="01-prod.tfvars"
+
+#convert it to json
+terraform show -json tfplan.binary > plan.json
+
+# estimate the cost
+infracost breakdown --path plan.json 

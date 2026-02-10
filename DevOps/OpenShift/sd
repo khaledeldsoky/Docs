@@ -1,0 +1,58 @@
+
+sudo apt update
+sudo apt install -y wget tar openssh-client apache2 haproxy
+ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519 -N ""
+mkdir ~/ocp-install
+cd ~/ocp-install
+wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-install-linux.tar.gz
+wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz
+wget https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/latest/rhcos-4.18.1-x86_64-metal.x86_64.raw.gz
+tar -xvf openshift-install-linux.tar.gz
+tar -xvf openshift-client-linux.tar.gz
+chmod +x openshift-install oc
+sudo mv openshift-install oc /usr/local/bin/
+# Download pull secret to ~/ocp-install/pull-secret.txt from https://console.redhat.com/openshift/install/pull-secret
+
+# -----------------------------
+vi install-config.yaml
+
+apiVersion: v1
+baseDomain: example.com
+compute:
+- hyperthreading: Enabled
+  name: worker
+  replicas: 1
+controlPlane:
+  hyperthreading: Enabled
+  name: master
+  replicas: 1
+metadata:
+  name: my-cluster
+networking:
+  clusterNetwork:
+  - cidr: 10.128.0.0/14
+    hostPrefix: 23
+  networkType: OVNKubernetes
+  serviceNetwork:
+  - 172.30.0.0/16
+platform:
+  none: {}
+pullSecret: '{"auths":{"cloud.openshift.com":{"auth":"b3BlbnNoaWZ0LXJlbGVhc2UtZGV2K29jbV9hY2Nlc3NfYjhhMjA1NjhkNzViNGNkN2IwZmE3ZmU1YzQ1MmIxY2U6UEpWRVpSWFk3MzExNU41V0NFNERXRlBSMFJQOUpGWVgyRzMwWlAzRVRKVjgzVUREOE02VzBURlIyT0ROWEFXQQ==","email":"khlaedmohamedeldsoky@gmail.com"},"quay.io":{"auth":"b3BlbnNoaWZ0LXJlbGVhc2UtZGV2K29jbV9hY2Nlc3NfYjhhMjA1NjhkNzViNGNkN2IwZmE3ZmU1YzQ1MmIxY2U6UEpWRVpSWFk3MzExNU41V0NFNERXRlBSMFJQOUpGWVgyRzMwWlAzRVRKVjgzVUREOE02VzBURlIyT0ROWEFXQQ==","email":"khlaedmohamedeldsoky@gmail.com"},"registry.connect.redhat.com":{"auth":"fHVoYy1wb29sLWJmNmE2MDVlLTFmYzgtNDhmMi1iOTFjLWFhODMxMjlkY2M1ZTpleUpoYkdjaU9pSlNVelV4TWlKOS5leUp6ZFdJaU9pSmpPRE16WkRnd1pERmxPVEEwTURVeFltRXdNVFF6T1RNMFpqVTNORGxpT0NKOS5hWHZpUmlOX2pqeFUxN1BTUVBrSUVwU0N2U1h5UmhpQTVjYi1wcmxjaEotUlRvQk1oTi1kWVN4emk0TjlJdVNkSjlJZU5BUU45ZjF1NC1qeUpzSWFoeDBzN2h2UTdubzI5aXFlZmV6cTl4eXRPRHhyWGRfZi1qQ0NIMlZQbEFFOF9NcFBLdWJCRVVTUWR0NHJpeVBIdUROaWRUVV80dTRzOExFMUFTb3JlNElpUmNaczhGTU5UcmdTUkVldEd4cGZIenFlZDFLSl9NMXN2RVE2WEJwUU93WTJvZkwyMkVRaGFoRDJhbzR4cG9YelNHOTZDZUtvY1k5UjJCSFV4YzEyejByellBS054V1R5OHdoZUl6Qmk4cWFvUVhUYV9CY3BQaERIdzA2ejZzdUVrekk1NFJEMXJMTWJaNXFqb05OLTU3QXB6ZURYUTk5Q1N1Q0pQWjF1QUVNc01MMkltd0QweDc2TkwxbjZUSUNtVmpBZC04bUJOakVrbnViOGpzZXc2TGRNZHFWLW1ucDRSMmdCS0FSN29kZTV1bFZEWldvOG50Z3lkOGNGVy1ic0hLc2RMenRSX1k1T1hKTXlteE5na2RWb3lDbmlQT29razNtODl0dF91UEVFUGd1MEZndVBxaDVtVlNWeldXWFFNLVFRc0pKUEJxUnJrNURvaWxuRzJicGdvZE1rdlF5VFFDQUtwR3ZSWGh6NWFkQ3F0ZVgwMEVKSHF5bGZ3X1VpbnFtbW5SWjdHMU5aZU1pdnpydjAtZXpKdHFqWEtrdGw0dEZIWmVZeU91b3FndnQ3NzVOamlWNkU2RTJwNDRHZEJhR1FKRmJxS1g1YVRRRHZseW5YMnZMZ0FmSlBySWZyTTE4TS1yV3BSU3F0Nng3OXNwb0xZRTJoelcyWVJITQ==","email":"khlaedmohamedeldsoky@gmail.com"},"registry.redhat.io":{"auth":"fHVoYy1wb29sLWJmNmE2MDVlLTFmYzgtNDhmMi1iOTFjLWFhODMxMjlkY2M1ZTpleUpoYkdjaU9pSlNVelV4TWlKOS5leUp6ZFdJaU9pSmpPRE16WkRnd1pERmxPVEEwTURVeFltRXdNVFF6T1RNMFpqVTNORGxpT0NKOS5hWHZpUmlOX2pqeFUxN1BTUVBrSUVwU0N2U1h5UmhpQTVjYi1wcmxjaEotUlRvQk1oTi1kWVN4emk0TjlJdVNkSjlJZU5BUU45ZjF1NC1qeUpzSWFoeDBzN2h2UTdubzI5aXFlZmV6cTl4eXRPRHhyWGRfZi1qQ0NIMlZQbEFFOF9NcFBLdWJCRVVTUWR0NHJpeVBIdUROaWRUVV80dTRzOExFMUFTb3JlNElpUmNaczhGTU5UcmdTUkVldEd4cGZIenFlZDFLSl9NMXN2RVE2WEJwUU93WTJvZkwyMkVRaGFoRDJhbzR4cG9YelNHOTZDZUtvY1k5UjJCSFV4YzEyejByellBS054V1R5OHdoZUl6Qmk4cWFvUVhUYV9CY3BQaERIdzA2ejZzdUVrekk1NFJEMXJMTWJaNXFqb05OLTU3QXB6ZURYUTk5Q1N1Q0pQWjF1QUVNc01MMkltd0QweDc2TkwxbjZUSUNtVmpBZC04bUJOakVrbnViOGpzZXc2TGRNZHFWLW1ucDRSMmdCS0FSN29kZTV1bFZEWldvOG50Z3lkOGNGVy1ic0hLc2RMenRSX1k1T1hKTXlteE5na2RWb3lDbmlQT29razNtODl0dF91UEVFUGd1MEZndVBxaDVtVlNWeldXWFFNLVFRc0pKUEJxUnJrNURvaWxuRzJicGdvZE1rdlF5VFFDQUtwR3ZSWGh6NWFkQ3F0ZVgwMEVKSHF5bGZ3X1VpbnFtbW5SWjdHMU5aZU1pdnpydjAtZXpKdHFqWEtrdGw0dEZIWmVZeU91b3FndnQ3NzVOamlWNkU2RTJwNDRHZEJhR1FKRmJxS1g1YVRRRHZseW5YMnZMZ0FmSlBySWZyTTE4TS1yV3BSU3F0Nng3OXNwb0xZRTJoelcyWVJITQ==","email":"khlaedmohamedeldsoky@gmail.com"}}}'
+sshKey: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFLm8qqHNewE7ubcHQBa2QexUiWXyOQ/hzD0Xq53Gxj7 ubuntu@instance-installer-ocp'
+
+cp install-config.yaml install-config.yaml.bak
+# -----------------------------
+openshift-install create ignition-configs
+# -----------------------------
+sudo mkdir -p /var/www/html/ignition
+sudo cp ~/ocp-install/*.ign /var/www/html/ignition/
+sudo chmod -R 755 /var/www/html/ignition
+sudo systemctl enable apache2
+sudo systemctl restart apache2
+
+# -----------------------------
+sudo vi /etc/hosts
+
+192.168.1.12 api.my-cluster.example.com 
+192.168.1.13 console-openshift-console.apps.my-cluster.example.com oauth-openshift.apps.my-cluster.example.com
+# -----------------------------

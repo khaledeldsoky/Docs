@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: sakila
+      MYSQL_USER: khaled
+      MYSQL_PASSWORD: pass123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      # - ./sakila-schema.sql:/docker-entrypoint-initdb.d/1_schema.sql
+      # - ./sakila-data.sql:/docker-entrypoint-initdb.d/2_data.sql
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+volumes:
+  mysql_data:
+
+# docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=123 -p 3306:3306 -d mysql
+
+# docker cp /home/khaled/khaled/SQL/sakila-db/sakila-db/sakila-schema.sql mysql-container:/sakila-schema.sql
+# docker cp /home/khaled/khaled/SQL/sakila-db/sakila-db/sakila-data.sql mysql-container:/sakila-data.sql
+
+# docker exec -it mysql-container mysql -uroot -p123
+# SOURCE /sakila-schema.sql;
+# SOURCE /sakila-data.sql;
+
+# SHOW DATABASES;
+
+# Host: localhost
+# Port: 3306
+# Username: root
+# Password: 123 (or whatever you set)

@@ -1,0 +1,86 @@
+CREATE TABLE signup (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL ,
+    phone VARCHAR(100) NOT NULL,
+    token VARCHAR(20)  NOT NULL
+);
+
+
+ALTER TABLE signup
+  MODIFY password VARCHAR(255) NOT NULL,
+  MODIFY phone VARCHAR(20) NOT NULL,
+  MODIFY token VARCHAR(255) DEFAULT NULL;
+
+
+select * from signup
+
+
+-----------------------------------
+SELECT name,(salary+bonus-tax-deduction) As FinalSalary from employees ORDER BY FinalSalary
+
+SELECT COUNT(*) from employees WHERE id = 1
+
+
+SELECT COUNT(*) total , AVG(salary+bonus-tax-deduction) "AVG Salary" from employees
+
+----------------------------------------------
+
+# How Create DATABASE ...
+CREATE DATABASE library_db;
+
+# How Show DATABASE ...
+SHOW DATABASES;
+
+# How Create Table ...
+CREATE TABLE employees (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    salary DOUBLE NOT NULL,
+    bonus DOUBLE NOT NULL,
+    tax DOUBLE NOT NULL,
+    deduction DOUBLE NOT NULL
+);
+
+# How Add Table ...
+ALTER TABLE employees
+ADD COLUMN email VARCHAR(255) NOT NULL;
+
+---------------------------------------------
+
+RENAME TABLE signup TO users;
+
+
+ALTER TABLE users DROP COLUMN token;
+
+ALTER TABLE users
+CHANGE password password_hash VARCHAR(255) NOT NULL;
+
+CREATE TABLE phone_otps (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    phone VARCHAR(11) NOT NULL,
+    otp_code VARCHAR(6) NOT NULL,
+    expires_at DATETIME NOT NULL,
+    is_used BOOLEAN DEFAULT false,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+DELIMITER //
+
+CREATE TRIGGER before_insert_phone_otp
+BEFORE INSERT ON phone_otps
+FOR EACH ROW
+BEGIN
+    SET NEW.otp_code = LPAD(FLOOR(RAND() * 1000000), 6, '0');
+    SET NEW.expires_at = NOW() + INTERVAL 30 MINUTE;
+END
+DELIMITER ;
+
+INSERT INTO phone_otps (user_id, phone) VALUES (5, '01117345678');
+
+
+SELECT * FROM phone_otps;

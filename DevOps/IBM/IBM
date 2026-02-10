@@ -1,0 +1,6 @@
+ibmcloud resource group-delete khaled
+
+vim ~/.bashrc
+export IC_API_KEY="API_KEY"
+export TF_VAR_ibmcloud_api_key="$IC_API_KEY"
+

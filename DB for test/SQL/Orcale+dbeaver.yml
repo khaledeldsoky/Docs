@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  oracle-db:
+    image: gvenzl/oracle-xe:slim
+    container_name: oracle-xe
+    ports:
+      - "1521:1521"
+    environment:
+      ORACLE_PASSWORD: Oracle123
+    # networks:
+    #   - oranet
+
+  # dbeaver:
+  #   image: dbeaver/cloudbeaver
+  #   container_name: cloudbeaver
+  #   ports:
+  #     - "8978:8978"
+  #   depends_on:
+  #     - oracle-db
+  #   networks:
+  #     - oranet
+
+# networks:
+#   oranet:

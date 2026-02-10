@@ -1,0 +1,27 @@
+Login to CloudBeaver GUI:
+  Default user: admin
+  Default pass: admin
+
+In CloudBeaver:
+- Click "New Connection"
+- Choose Oracle
+- Use these values:
+  Field	    Value
+  Host	    oracle-db (because both containers are on the same network)
+  Port	    1521
+  Database	XEPDB1 or XE (try both)
+  Username	system
+  Password	Oracle123
+
+docker run -d -p 1521:1521 -e ORACLE_PASSWORD=123 -v oracle-volume:/opt/oracle/oradata gvenzl/oracle-xe:slim
+Come , give a data base for pratice 
+sqlplus system/123@127.0.0.1:1521/XE
+
+_______________________________________________
+When adding a new connection in CloudBeaver:
+Database type: Oracle
+Host: oracle-xe (use the container name because they're on the same Docker network)
+Port: 1521
+SID: XE
+Username: system
+Password: Oracle123

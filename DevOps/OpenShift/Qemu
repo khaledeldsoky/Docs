@@ -1,0 +1,15 @@
+```sh
+sudo apt install qemu-utils
+gunzip rhcos-4.12.10-x86_64-metal.x86_64.raw.gz 
+qemu-img convert -f raw -O qcow2 rhcos-4.12.10-x86_64-metal.x86_64.raw rhcos-4.12.10-x86_64-metal.qcow2
+```
+
+```sh
+# Granting Reader and Writer access to all buckets from the CLI
+ibmcloud iam authorization-policy-create is cloud-object-storage Reader,Writer --source-resource-type image
+```
+
+```sh
+# Importing a custom image by using the CLI
+ibmcloud is image-create my-ubuntu-16-amd64 --file cos://us-south/custom-image-vpc-bucket/customImage-0.qcow2 --os-name ubuntu-16-amd64
+```

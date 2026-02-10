@@ -1,0 +1,11 @@
+docker volume create mysql_data
+
+docker run -d \
+  --name mysql-db \
+  -e MYSQL_ROOT_PASSWORD=root123 \
+  -v mysql_data:/var/lib/mysql \
+  -p 3306:3306 \
+  mysql:latest
+
+
+  
