@@ -59,7 +59,28 @@ Dear All,
 # Apologies 
 Apologies for 
 
+# Invitation
+- ICT and DB team available tomorrow 10 am , please confirm if that’s ok with ALKAN and eng house to share invitation accordingly .
+
+- Please be informed that the ICT and DB teams are available tomorrow at 10:00 AM.
+  Kindly confirm if this time is convenient.
+
+- Would it work at 2 p.m. Egypt time? 
+
+- TE DB team will not be available at that time, due to Ramadan working hours ending at 1 PM for TE. So, is it okay to have it tomorrow at 10 AM Cairo time ?
+
+- Tomorrow 10 a.m. is perfectly fine, I have sent an invitation in the calendar- please forward it to whoever needs it. 
+  Sorry I was not aware of the special Ramadan hours.
+
+- Thank you Valentin, I have shared the invitation with TE.
+
+- Reference our call , we will have a meeting today at 11:30 , invitation will be shared now.
+
+
+
+
 Please be aware that Viavi will shut down the lab servers at 11:00 AM our time tomorrow in sha Alla. And later, they will take your agreement on the production date. 
+
 
 
 On behalf of Ahmed  - بالنيابه عن

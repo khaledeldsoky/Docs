@@ -1,42 +1,24 @@
-## Install argocd
+
 
 ```sh
-kubectl create namespace argocd
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-kubectl -n argocd patch svc argocd-server -p '{"spec": {"type": "NodePort"}}'
+
 ```
 
-## We have problem with DNS server so we change the  configuration /etc/resolv.conf and add dns server
+
 
 ```sh
-nameserver 8.8.8.8
-nameserver 1.1.1.1
+
 ```
 
-## We should restart DNS service 
+
 ```sh
-sudo systemctl restart systemd-resolved
+
 ```
 
 ---------------------------------------------------------------------------
 
-## We have a problem the master in the private subnet so we will try out possibilities or experiments
-
-- We will install Ingress Controller in the master
-`kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.9.5/deploy/static/provider/cloud/deploy.yaml`
 
 
-- need to change the ingress controller Service type to NodePort
-`kubectl -n ingress-nginx edit svc ingress-nginx-controller`
-
-- Change the service type
-```
-spec:
-  type: NodePort
-```
-
-- Show node ports for ingress-nginx
-`kubectl -n ingress-nginx get svc ingress-nginx-controller`
 
 ---------------------------------------------------------------------------
 
