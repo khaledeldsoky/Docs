@@ -75,22 +75,13 @@ Apologies for
 - Thank you Valentin, I have shared the invitation with TE.
 
 - Reference our call , we will have a meeting today at 11:30 , invitation will be shared now.
+  
 
 
+- Can you please share the earliest available time for Mikael to join tomorrow to arrange with TE.
 
 
 Please be aware that Viavi will shut down the lab servers at 11:00 AM our time tomorrow in sha Alla. And later, they will take your agreement on the production date. 
 
 
 
-On behalf of Ahmed  - بالنيابه عن
-Despite = Altough 
-Observed            - لاحظنا
-Moreover,           - علاوه ع ذلك
-Whether             - سواء , إذا
-Remained            - ظل , فضل موجود
-re-instated         - اعاده تثبيتها
-revoked             - تم الغاءها
-reproduce           - اعاده انتاج
-in order to         - لكي , لاجل , عشان
-Upon checking further -
