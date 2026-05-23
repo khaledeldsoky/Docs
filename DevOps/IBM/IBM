@@ -4,3 +4,10 @@ vim ~/.bashrc
 export IC_API_KEY="API_KEY"
 export TF_VAR_ibmcloud_api_key="$IC_API_KEY"
 
+
+
+ibmcloud resource groups
+
+ibmcloud resource group-delete <group_name_or_id>
+
+ibmcloud resource service-instances -g <GROUP_NAME> --type all
