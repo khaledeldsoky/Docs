@@ -1,0 +1,43 @@
+{
+    "__version": "2.13.0",
+    "__comments": "VCSA 7.0.3 deployment on ESXi 172.20.0.151",
+    "new_vcsa": {
+        "esxi": {
+            "hostname": "172.20.0.151",
+            "username": "root",
+            "password": "root@123",
+            "deployment_network": "VM Network",
+            "datastore": "datastore1"
+        },
+        "appliance": {
+            "thin_disk_mode": true,
+            "deployment_option": "small",
+            "name": "vcsa-01"
+        },
+        "network": {
+            "ip_family": "ipv4",
+            "mode": "static",
+            "system_name": "172.20.0.101",
+            "ip": "172.20.0.101",
+            "prefix": "16",
+            "gateway": "172.20.0.254",
+            "dns_servers": [
+                "172.16.1.16"
+            ]
+        },
+        "os": {
+            "password": "Root@123",
+            "ntp_servers": "pool.ntp.org",
+            "ssh_enable": true
+        },
+        "sso": {
+            "password": "Root@123",
+            "domain_name": "vsphere.local"
+        }
+    },
+    "ceip": {
+        "settings": {
+            "ceip_enabled": false
+        }
+    }
+}

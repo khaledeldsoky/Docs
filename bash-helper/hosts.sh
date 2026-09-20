@@ -1,4 +1,4 @@
-cat  <<-OEF  > /mnt/linux/data/project/final-project/ansible/hosts
+cat  <<-OEF  > <PATH_TO_HOSTS_ANSIBLE_FILE>
 [bastion]
 $1
 $2
